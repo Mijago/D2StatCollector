@@ -1,0 +1,42 @@
+﻿version: "3"
+services:
+  d2stat-collector:
+    build:
+        context: .
+        dockerfile: ./D2StatCollector.Server/Dockerfile
+    container_name: d2stat-collector
+    restart: unless-stopped
+    depends_on:
+      - d2stat-influxdb
+      - d2stat-grafana
+    env_file:
+      - .env-collector
+
+  d2stat-influxdb:
+    image: influxdb:latest
+    container_name: d2stat-influxdb
+    restart: unless-stopped
+    ports:
+      - 8086:8086
+      - 8083:8083
+    volumes:
+      - influxdb:/var/lib/influxdb
+    env_file:
+      - .env-influxdb
+
+  d2stat-grafana:
+    image: grafana/grafana:latest
+    container_name: d2stat-grafana
+    restart: unless-stopped
+    ports:
+      - 3000:3000
+    volumes:
+      - grafana:/var/lib/grafana
+    env_file:
+      - .env-grafana
+    depends_on:
+      - d2stat-influxdb
+
+volumes:
+  influxdb:
+  grafana:
