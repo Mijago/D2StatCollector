@@ -1,9 +1,6 @@
 # D2StatCollector
 A continuous stat collector for Destiny 2.
 
-<img src="doc/example-01.png" style="max-width:200px;">
-<img src="doc/example-02.png" style="max-width:200px;">
-<img src="doc/example-03.png" style="max-width:200px;">
 
 
 ## What it does
@@ -12,6 +9,14 @@ It does this repeatedly for every user in **one or multiple Clans**.
 
 Per default, it collects every 10 minutes, but you can adapt this setting.
 I suggest that you do not lower this below 5 minutes.
+
+## What it looks like
+The docker-compose file starts a Grafana instance, which you can use to visualize the data.
+You can use the collected data to make dashboards like this one. The json for this dashboard can be found [here](doc/example-dashboard.json).
+
+<img src="doc/example-01.png" style="max-width:200px;">
+<img src="doc/example-02.png" style="max-width:200px;">
+<img src="doc/example-03.png" style="max-width:200px;">
 
 ## How to use
 1. Modify the environment variables in the `.env-*` files to your needs.
@@ -36,10 +41,3 @@ For a quick start, head over to the [issues](https://github.com/Mijago/D2StatCol
 
 Build the image with `docker build --target final -f D2StatCollector.Server/Dockerfile -t d2stat-collector:dev .` and change the image in the docker-compose file to `d2stat-collector:dev`.
 
-## What it looks like
-The docker-compose file starts a Grafana instance, which you can use to visualize the data.
-You can use the collected data to make dashboards like this one:
-
-<img src="doc/example-01.png" style="max-width:600px;">
-<img src="doc/example-02.png" style="max-width:600px;">
-<img src="doc/example-03.png" style="max-width:600px;">
