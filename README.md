@@ -1,10 +1,10 @@
 # D2StatCollector
-Initial prototype. Actually, the second prototype.
+A continuous stat collector for Destiny 2.
 
-Todos:
-- Logging
-- Error handling
-- Improve Thread handling
+<img src="doc/example-01.png" style="max-width:200px;">
+<img src="doc/example-02.png" style="max-width:200px;">
+<img src="doc/example-03.png" style="max-width:200px;">
+
 
 ## What it does
 This application collects data from the Destiny 2 API and stores it in a database.
@@ -31,13 +31,15 @@ I suggest that you do not lower this below 5 minutes.
 
 
 ## Contribution
-Feel free to contribute to this project. Just open a pull request.
+Feel free to contribute to this project. Just open a pull request. 
+For a quick start, head over to the [issues](https://github.com/Mijago/D2StatCollector/issues?q=is%3Aissue+is%3Aopen+label%3A"good+first+issue") with the label "good first issue". Thanks!
 
 Build the image with `docker build --target final -f D2StatCollector.Server/Dockerfile -t d2stat-collector:dev .` and change the image in the docker-compose file to `d2stat-collector:dev`.
 
 ## What it looks like
 The docker-compose file starts a Grafana instance, which you can use to visualize the data.
 You can use the collected data to make dashboards like this one:
-![example-01.png](doc%2Fexample-01.png)
-![example-02.png](doc%2Fexample-02.png)
-![example-03.png](doc%2Fexample-03.png)
+
+<img src="doc/example-01.png" style="max-width:600px;">
+<img src="doc/example-02.png" style="max-width:600px;">
+<img src="doc/example-03.png" style="max-width:600px;">
