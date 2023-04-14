@@ -18,14 +18,10 @@ public class MetricsCollector : AStatCollector
     {
     }
 
-    public override async Task Collect(DestinyProfileResponse profile)
+    public override async Task Collect(DestinyProfileResponse profile, Dictionary<string, string> additionalTags)
     {
         var time = DateTime.UtcNow;
-        var point = PointData
-            .Measurement("user_character_metrics")
-            .Tag("user_membershipId", profile.Profile.Data.UserInfo.MembershipId.ToString())
-            .Tag("user_membershipType", profile.Profile.Data.UserInfo.MembershipType.ToString())
-            .Tag("user_displayName", profile.Profile.Data.UserInfo.BungieGlobalDisplayName+"#"+profile.Profile.Data.UserInfo.BungieGlobalDisplayNameCode)
+        var point = BuildDefaultPointData("user_character_metrics", additionalTags)
             .Timestamp(time, WritePrecision.Ns);
         foreach (var (key, metric) in profile.Metrics.Data.Metrics)
         {

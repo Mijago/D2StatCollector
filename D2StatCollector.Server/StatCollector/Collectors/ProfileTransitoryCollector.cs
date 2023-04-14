@@ -19,7 +19,7 @@ public class ProfileTransitoryCollector : AStatCollector
     {
     }
 
-    public override async Task Collect(DestinyProfileResponse profile)
+    public override async Task Collect(DestinyProfileResponse profile, Dictionary<string, string> additionalTags)
     {
         if (profile.ProfileTransitoryData.Data == null)
         {
@@ -36,13 +36,7 @@ public class ProfileTransitoryCollector : AStatCollector
 
 
         var time = DateTime.UtcNow;
-        var point = PointData
-            .Measurement("user_profile_transitory")
-            .Tag("user_membershipId", profile.Profile.Data.UserInfo.MembershipId.ToString())
-            .Tag("user_membershipType", profile.Profile.Data.UserInfo.MembershipType.ToString())
-            .Tag("user_displayName",
-                profile.Profile.Data.UserInfo.BungieGlobalDisplayName + "#" +
-                profile.Profile.Data.UserInfo.BungieGlobalDisplayNameCode)
+        var point = BuildDefaultPointData("user_profile_transitory", additionalTags)
             .Field("partySize", partySize)
             .Field("joinAbilityOpenSlots", joinAbilityOpenSlots)
             .Field("currentActivityScore", currentActivityScore)

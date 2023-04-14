@@ -34,7 +34,18 @@ public abstract class AStatCollector : IStatCollector
         writeApi.WritePoints(data, influxDbBucket, influxDbOrg);
     }
 
+    protected PointData BuildDefaultPointData(string measurementName, Dictionary<string, string> additionalTags)
+    {
+        var point = PointData
+            .Measurement(measurementName);
+        
+        foreach (var (key, value) in additionalTags)
+            point = point.Tag(key, value);
+
+        return point;
+    }
+
     // get clan members by clan id
-    public abstract Task Collect(DestinyProfileResponse profile);
+    public abstract Task Collect(DestinyProfileResponse profile, Dictionary<string, string> additionalTags);
     public abstract DestinyComponentType[] RequiredComponentTypes { get; }
 }

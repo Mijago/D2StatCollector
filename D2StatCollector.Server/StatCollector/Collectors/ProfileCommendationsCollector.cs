@@ -18,26 +18,18 @@ public class ProfileCommendationsCollector : AStatCollector
     {
     }
 
-    public override async Task Collect(DestinyProfileResponse profile)
+    public override async Task Collect(DestinyProfileResponse profile, Dictionary<string, string> additionalTags)
     {
         var time = DateTime.UtcNow;
         commendationScoresByHash(profile, time);
         commendationNodeScoresByHash(profile, time);
         
-        var point = PointData
-            .Measurement("user_profile_commendations")
-            .Tag("user_membershipId", profile.Profile.Data.UserInfo.MembershipId.ToString())
-            .Tag("user_membershipType", profile.Profile.Data.UserInfo.MembershipType.ToString())
-            .Tag("user_displayName",
-                profile.Profile.Data.UserInfo.BungieGlobalDisplayName + "#" +
-                profile.Profile.Data.UserInfo.BungieGlobalDisplayNameCode)
+        var point =  BuildDefaultPointData("user_profile_commendations", additionalTags)
             .Tag("category", "general")
             .Field("totalScore", profile.ProfileCommendations.Data.TotalScore)
             .Timestamp(time, WritePrecision.Ns);
 
         WritePoint(point);
-        
-        
     }
 
     private void commendationScoresByHash(DestinyProfileResponse profile, DateTime time)

@@ -19,7 +19,7 @@ public class ProfileRecordsCollector : AStatCollector
     {
     }
 
-    public override async Task Collect(DestinyProfileResponse profile)
+    public override async Task Collect(DestinyProfileResponse profile, Dictionary<string, string> additionalTags)
     {
         var score = profile.ProfileRecords.Data.Score;
         var activeScore = profile.ProfileRecords.Data.ActiveScore;
@@ -29,13 +29,7 @@ public class ProfileRecordsCollector : AStatCollector
         
         
         var time = DateTime.UtcNow;
-        var point = PointData
-            .Measurement("user_profile_records")
-            .Tag("user_membershipId", profile.Profile.Data.UserInfo.MembershipId.ToString())
-            .Tag("user_membershipType", profile.Profile.Data.UserInfo.MembershipType.ToString())
-            .Tag("user_displayName",
-                profile.Profile.Data.UserInfo.BungieGlobalDisplayName + "#" +
-                profile.Profile.Data.UserInfo.BungieGlobalDisplayNameCode)
+        var point = BuildDefaultPointData("user_profile_records", additionalTags)
             .Field("score", score)
             .Field("activeScore", activeScore)
             .Field("legacyScore", legacyScore)

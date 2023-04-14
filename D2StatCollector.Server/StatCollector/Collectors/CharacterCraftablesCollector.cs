@@ -19,7 +19,7 @@ public class CharacterCraftablesCollector : AStatCollector
     {
     }
 
-    public override async Task Collect(DestinyProfileResponse profile)
+    public override async Task Collect(DestinyProfileResponse profile, Dictionary<string, string> additionalTags)
     {
         // define a dict
         var dict = new Dictionary<uint, int>();
@@ -43,12 +43,7 @@ public class CharacterCraftablesCollector : AStatCollector
         var time = DateTime.UtcNow;
         foreach (var (key, value) in dict)
         {
-            var point = PointData
-                .Measurement("user_character_craftables2")
-                .Tag("user_membershipId", profile.Profile.Data.UserInfo.MembershipId.ToString())
-                .Tag("user_membershipType", profile.Profile.Data.UserInfo.MembershipType.ToString())
-                .Tag("user_displayName", profile.Profile.Data.UserInfo.BungieGlobalDisplayName+"#"+profile.Profile.Data.UserInfo.BungieGlobalDisplayNameCode)
-                
+            var point = BuildDefaultPointData("user_character_craftables", additionalTags)
                 .Timestamp(time, WritePrecision.Ns);
             point = point.Tag("craftable_hash", key.ToString());
             point = point.Field("value", value);

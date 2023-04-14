@@ -21,7 +21,7 @@ public class HistoricalStatsCollector : AStatCollector
     {
     }
 
-    public override async Task Collect(DestinyProfileResponse profile)
+    public override async Task Collect(DestinyProfileResponse profile, Dictionary<string, string> additionalTags)
     {
         var response =
             await _bng.ApiAccess.Destiny2.GetHistoricalStatsForAccount(
@@ -32,12 +32,13 @@ public class HistoricalStatsCollector : AStatCollector
 
         var time = DateTime.UtcNow;
 
-        HandleCharacters(profile, response, time);
-        HandleMerged(profile, response, time);
+        HandleCharacters(profile, response, time, additionalTags);
+        HandleMerged(profile, response, time, additionalTags);
     }
 
     private void HandleCharacters(DestinyProfileResponse profile,
-        BungieResponse<DestinyHistoricalStatsAccountResult> response, DateTime time)
+        BungieResponse<DestinyHistoricalStatsAccountResult> response, DateTime time,
+        Dictionary<string, string> additionalTags)
     {
         List<PointData> points = new List<PointData>();
 
@@ -45,13 +46,7 @@ public class HistoricalStatsCollector : AStatCollector
         {
             foreach (var (category, categoryStats) in character.Results)
             {
-                var point = PointData
-                    .Measurement("user_historical_stats")
-                    .Tag("user_membershipId", profile.Profile.Data.UserInfo.MembershipId.ToString())
-                    .Tag("user_membershipType", profile.Profile.Data.UserInfo.MembershipType.ToString())
-                    .Tag("user_displayName",
-                        profile.Profile.Data.UserInfo.BungieGlobalDisplayName + "#" +
-                        profile.Profile.Data.UserInfo.BungieGlobalDisplayNameCode)
+                var point = BuildDefaultPointData("user_historical_stats", additionalTags)
                     .Tag("character_id", character.CharacterId.ToString())
                     .Tag("category", category)
                     .Timestamp(time, WritePrecision.Ns);
@@ -79,19 +74,14 @@ public class HistoricalStatsCollector : AStatCollector
     }
 
     private void HandleMerged(DestinyProfileResponse profile,
-        BungieResponse<DestinyHistoricalStatsAccountResult> response, DateTime time)
+        BungieResponse<DestinyHistoricalStatsAccountResult> response, DateTime time,
+        Dictionary<string, string> additionalTags)
     {
         List<PointData> points = new List<PointData>();
 
         foreach (var (category, categoryStats) in response.Response.MergedAllCharacters.Results)
         {
-            var point = PointData
-                .Measurement("user_historical_stats_merged")
-                .Tag("user_membershipId", profile.Profile.Data.UserInfo.MembershipId.ToString())
-                .Tag("user_membershipType", profile.Profile.Data.UserInfo.MembershipType.ToString())
-                .Tag("user_displayName",
-                    profile.Profile.Data.UserInfo.BungieGlobalDisplayName + "#" +
-                    profile.Profile.Data.UserInfo.BungieGlobalDisplayNameCode)
+            var point = BuildDefaultPointData("user_historical_stats_merged", additionalTags)
                 .Tag("category", category)
                 .Timestamp(time, WritePrecision.Ns);
             

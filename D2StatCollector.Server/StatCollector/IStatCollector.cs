@@ -9,7 +9,7 @@ namespace D2StatCollector.Server.StatCollector;
 public interface IStatCollector
 {
     // get clan members by clan id
-    Task Collect(DestinyProfileResponse profile);
+    Task Collect(DestinyProfileResponse profile, Dictionary<string, string> additionalTags);
     
     DestinyComponentType[] RequiredComponentTypes { get; }
 }

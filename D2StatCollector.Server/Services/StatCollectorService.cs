@@ -21,11 +21,11 @@ public class StatCollectorService
         _collectors = services.GetServices<IStatCollector>();
     }
 
-    
+
     public async Task CollectAll()
     {
         // TODO: add a method to collect for individual users 
-        
+
         // read environment variable "D2SC_CLANS". A comma separated list of clan ids.
         var clanVar = Environment.GetEnvironmentVariable("D2SC_CLANS");
         // split clanVar by "," trim spaces and convert to long
@@ -51,14 +51,14 @@ public class StatCollectorService
         foreach (var clanMember in clanMembers)
         {
             Task.Run(() =>
-                CollectMember(clanMember.DestinyUserInfo.MembershipType, clanMember.DestinyUserInfo.MembershipId)
+                CollectMember(clanMember.DestinyUserInfo.MembershipType, clanMember.DestinyUserInfo.MembershipId, clanId)
                     .ConfigureAwait(false));
         }
 
         Console.WriteLine("Queued all");
     }
 
-    public async Task CollectMember(BungieMembershipType membershipType, long membershipId)
+    public async Task CollectMember(BungieMembershipType membershipType, long membershipId, long? clanId)
     {
         var componentTypes = _collectors.SelectMany(e => e.RequiredComponentTypes).Distinct().ToArray();
 
@@ -69,12 +69,24 @@ public class StatCollectorService
             componentTypes
         );
 
+        var additionalTags = new Dictionary<string, string>
+        {
+            { "user_membershipId", membershipId.ToString() },
+            { "user_membershipType", membershipType.ToString() },
+            {
+                "user_displayName",
+                profile.Result.Response.Profile.Data.UserInfo.BungieGlobalDisplayName + "#" +
+                profile.Result.Response.Profile.Data.UserInfo.BungieGlobalDisplayNameCode
+            }
+        };
+        additionalTags.Add("clan_id", clanId?.ToString() ?? "none" );
+
         foreach (var statCollector in _collectors)
         {
             Console.WriteLine("Collect " + statCollector.GetType().Name);
 
 
-            await statCollector.Collect(profile.Result.Response);
+            await statCollector.Collect(profile.Result.Response, additionalTags);
             Console.WriteLine("Done collecting " + statCollector.GetType().Name + "");
         }
     }

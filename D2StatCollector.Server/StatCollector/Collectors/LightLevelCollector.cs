@@ -20,20 +20,16 @@ public class LightLevelCollector : AStatCollector
     {
     }
 
-    public override async Task Collect(DestinyProfileResponse profile)
+    public override async Task Collect(DestinyProfileResponse profile, Dictionary<string, string> additionalTags)
     {
         var Light = profile.Characters.Data.Select(c => c.Value.Light).Max();
         var MinutesPlayedTotal = profile.Characters.Data.Select(c => c.Value.MinutesPlayedTotal).Max();
         var MinutesPlayedThisSession = profile.Characters.Data.Select(c => c.Value.MinutesPlayedThisSession).Max();
         var LifetimeHighestGuardianRank = profile.Profile.Data.LifetimeHighestGuardianRank;
         var CurrentGuardianRank = profile.Profile.Data.CurrentGuardianRank;
-        
+
         var time = DateTime.UtcNow;
-        var point = PointData
-            .Measurement("user_profile_generic")
-            .Tag("user_membershipId", profile.Profile.Data.UserInfo.MembershipId.ToString())
-            .Tag("user_membershipType", profile.Profile.Data.UserInfo.MembershipType.ToString())
-            .Tag("user_displayName", profile.Profile.Data.UserInfo.BungieGlobalDisplayName+"#"+profile.Profile.Data.UserInfo.BungieGlobalDisplayNameCode)
+        var point = BuildDefaultPointData("user_profile_generic", additionalTags)
             .Field("light", Light)
             .Field("minutesPlayedTotal", MinutesPlayedTotal)
             .Field("minutesPlayedThisSession", MinutesPlayedThisSession)

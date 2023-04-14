@@ -19,20 +19,14 @@ public class ProfileProgressionCollector : AStatCollector
     {
     }
 
-    public override async Task Collect(DestinyProfileResponse profile)
+    public override async Task Collect(DestinyProfileResponse profile, Dictionary<string, string> additionalTags)
     {
         var points = new List<PointData>();
         
         foreach (var (key, value) in profile.ProfileProgression.Data.Checklists)
         {
             var time = DateTime.UtcNow;
-            var point = PointData
-                .Measurement("user_profile_progression")
-                .Tag("user_membershipId", profile.Profile.Data.UserInfo.MembershipId.ToString())
-                .Tag("user_membershipType", profile.Profile.Data.UserInfo.MembershipType.ToString())
-                .Tag("user_displayName",
-                    profile.Profile.Data.UserInfo.BungieGlobalDisplayName + "#" +
-                    profile.Profile.Data.UserInfo.BungieGlobalDisplayNameCode)
+            var point = BuildDefaultPointData("user_profile_progression", additionalTags)
                 .Tag("checklist_id", key.Hash.ToString())
                 .Timestamp(time, WritePrecision.Ns);
 
