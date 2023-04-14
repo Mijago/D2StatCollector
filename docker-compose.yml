@@ -1,7 +1,7 @@
 ﻿version: "3"
 services:
   d2stat-collector:
-    image: d2stat-collector:dev
+    image: mijago/d2stat-collector:latest
     container_name: d2stat-collector
     restart: unless-stopped
     depends_on:
@@ -38,6 +38,9 @@ services:
       - grafana:/var/lib/grafana
     env_file:
       - .env-grafana
+    environment:
+      # This is for discord oauth. If you do not use discord oauth, you can remove this, but it does not do any harm to keep it.
+      GF_AUTH_GENERIC_OAUTH_TEAM_IDS_ATTRIBUTE_PATH: "[*].id"
     depends_on:
       - d2stat-influxdb
     networks:
