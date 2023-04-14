@@ -20,7 +20,7 @@ You can use the collected data to make dashboards like this one. The json for th
 
 ## How to use
 1. Modify the environment variables in the `.env-*` files to your needs.
-   2. **DEFINITELY** change the passwords to something secure.
+   **DEFINITELY** change the passwords to something secure.
 2. Then you can use `docker compose up` to start the application (s).
 3. Connect to your Grafana instance. Per default, it is available at http://localhost:3000.
 4. In Grafana, create a new datasource with the following settings:
