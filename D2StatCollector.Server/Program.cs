@@ -16,7 +16,6 @@ using InfluxDB.Client.Writes;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
-Console.WriteLine("Hello, World!");
 
 // sercice collection
 var services = new ServiceCollection();
