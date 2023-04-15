@@ -45,7 +45,7 @@ You can use the collected data to make dashboards like this one. The json for th
    5. Password: password (change this in the .env file)
    6. Example image can be found here: [grafana-datasource.png](doc%2Fgrafana-datasource.png)
 5. Create new Dashboards and have fun!
-   1. Here is an example dashboard (in json format) which you can import: [example-dashboard.json](doc%2Fexample-dashboard.json)
+   1. Here are some example dashboards (in json format) which you can import: [grafana-examples](doc%2Fgrafana-examples) - the one in the previews is [User Stats.json](doc%2Fgrafana-examples%2FUser%20Stats.json). 
 
 ## Warnings
 A few warnings:
