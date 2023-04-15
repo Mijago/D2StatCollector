@@ -53,6 +53,7 @@ A few warnings:
 - This application sends out many API calls. We have a Limit of 25 calls per second per IP, so if you let this run in your intranet, then it might happen that you can not use API tools (like DIM) and get "Connecting to Bungie Servers" ingame while the tool grabs data.
 - The application saves *a lot* of data. For this, you can set up InfluxDB retention policies. If you want to help with this, look at https://github.com/Mijago/D2StatCollector/issues/7.
 - Iron Banner and Trials of Osiris are NOT represented in the Crucible statistics delivered by the API 😥
+- The tool can **not** look into the past. It will only show data from the moment you started it. 
 
 ## Contribution
 Feel free to contribute to this project. Just open a pull request. 
